@@ -1,0 +1,71 @@
+[
+  {
+    "id": "a1b2c3d4-0001-4000-8000-000000000001",
+    "subject": "ELA",
+    "standard_type": "READING_DECODE",
+    "difficulty": 1,
+    "stem": "Which word rhymes with cat?",
+    "passage": null,
+    "choices": {
+      "a": "hat",
+      "b": "dog",
+      "c": "sun",
+      "d": "big"
+    },
+    "correct_answer": "a",
+    "explanation": "Hat and cat both end with the sound -at, so they rhyme.",
+    "audio_config": {
+      "read_passage": false,
+      "read_stem": true,
+      "read_choices": true
+    },
+    "status": "PENDING_REVIEW",
+    "created_at": "2026-04-07T12:00:00.000Z"
+  },
+  {
+    "id": "a1b2c3d4-0002-4000-8000-000000000002",
+    "subject": "ELA",
+    "standard_type": "READING_COMP",
+    "difficulty": 2,
+    "stem": "What did the dog do at the park?",
+    "passage": "Sam has a big dog. The dog likes to run. Sam took the dog to the park. The dog ran and ran.",
+    "choices": {
+      "a": "The dog went to sleep.",
+      "b": "The dog ran and ran.",
+      "c": "The dog ate a bone.",
+      "d": "The dog sat in a box."
+    },
+    "correct_answer": "b",
+    "explanation": "The story says the dog ran and ran at the park.",
+    "audio_config": {
+      "read_passage": false,
+      "read_stem": true,
+      "read_choices": true
+    },
+    "status": "PENDING_REVIEW",
+    "created_at": "2026-04-07T12:00:00.000Z"
+  },
+  {
+    "id": "a1b2c3d4-0003-4000-8000-000000000003",
+    "subject": "ELA",
+    "standard_type": "LISTENING_COMP",
+    "difficulty": 1,
+    "stem": "Where did Mia find the kitten?",
+    "passage": "Mia went to the garden. She saw a little kitten by the flowers. The kitten was soft and gray. Mia picked it up and smiled.",
+    "choices": {
+      "a": "In the kitchen",
+      "b": "By the flowers in the garden",
+      "c": "At the school",
+      "d": "Under the bed"
+    },
+    "correct_answer": "b",
+    "explanation": "The story tells us Mia saw the kitten by the flowers in the garden.",
+    "audio_config": {
+      "read_passage": true,
+      "read_stem": true,
+      "read_choices": true
+    },
+    "status": "PENDING_REVIEW",
+    "created_at": "2026-04-07T12:00:00.000Z"
+  }
+]
