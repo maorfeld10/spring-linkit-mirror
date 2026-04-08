@@ -6,7 +6,7 @@ import { getDefaultAudioConfig } from '@/types';
 
 type QuestionInsert = Database['public']['Tables']['questions']['Insert'];
 
-// âââ Request types ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// ─── Request types ──────────────────────────────────────────────────────────
 
 interface Blueprint {
   READING_DECODE: number;
@@ -27,7 +27,7 @@ const DEFAULT_BLUEPRINT: Blueprint = {
   LISTENING_COMP: 33,
 };
 
-// âââ Request validation ââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// ─── Request validation ──────────────────────────────────────────────────────
 
 function parseRequestBody(body: unknown): GenerateBody {
   if (typeof body !== 'object' || body === null) {
@@ -63,7 +63,7 @@ function parseRequestBody(body: unknown): GenerateBody {
   return { subject: 'ELA', count, topic, blueprint };
 }
 
-// âââ System prompt âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// ─── System prompt ───────────────────────────────────────────────────────────
 
 function buildSystemPrompt(
   count: number,
@@ -83,7 +83,7 @@ function buildSystemPrompt(
 
   const mixInstruction =
     `Generate approximately ${decodeCount} READING_DECODE, ${compCount} READING_COMP, and ${listenCount} LISTENING_COMP question(s). ` +
-    `This is a target ratio â it is acceptable to be off by 1 if the total is exactly ${count}.`;
+    `This is a target ratio — it is acceptable to be off by 1 if the total is exactly ${count}.`;
 
   return `You are an expert 1st-grade ELA assessment writer.
 
@@ -91,13 +91,13 @@ TASK: Generate exactly ${count} original ELA question(s) for a 1st-grade student
 
 TYPE MIX: ${mixInstruction}
 
-HARD RULES â violating ANY of these makes the output invalid:
+HARD RULES — violating ANY of these makes the output invalid:
 
-1. READING LEVEL: ATOS 1.0â1.8. Use only high-frequency Dolch and Fry sight words. Sentences must be short and simple.
+1. READING LEVEL: ATOS 1.0–1.8. Use only high-frequency Dolch and Fry sight words. Sentences must be short and simple.
 
 2. STANDARD TYPES:
    - READING_DECODE: phonics, letter sounds, rhyming, syllable counting, CVC words.
-   - READING_COMP: short passage (2â4 simple sentences) then a comprehension question.
+   - READING_COMP: short passage (2–4 simple sentences) then a comprehension question.
    - LISTENING_COMP: a short passage meant to be read aloud, then a comprehension question.
 
 3. CHOICES: Exactly 4 per question, keyed "a", "b", "c", "d". Exactly ONE correct answer.
@@ -110,12 +110,12 @@ HARD RULES â violating ANY of these makes the output invalid:
 
 7. PASSAGE RULES:
    - READING_DECODE: passage is null (no passage needed).
-   - READING_COMP: passage is a short paragraph (2â4 sentences, max 80 words).
-   - LISTENING_COMP: passage is a short paragraph (2â4 sentences, max 80 words).
+   - READING_COMP: passage is a short paragraph (2–4 sentences, max 80 words).
+   - LISTENING_COMP: passage is a short paragraph (2–4 sentences, max 80 words).
 
 8. STEM RULES: The question stem must be 25 words or fewer. Clear, direct, simple.
 
-9. AUDIO CONFIG â set automatically based on standard_type:
+9. AUDIO CONFIG — set automatically based on standard_type:
    - READING_DECODE:  { "read_passage": false, "read_stem": true, "read_choices": true }
    - READING_COMP:    { "read_passage": false, "read_stem": true, "read_choices": true }
    - LISTENING_COMP:  { "read_passage": true,  "read_stem": true, "read_choices": true }
@@ -135,7 +135,7 @@ RESPONSE FORMAT: Return ONLY a valid JSON array of question objects. No markdown
 }`;
 }
 
-// âââ Question validation âââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// ─── Question validation ─────────────────────────────────────────────────────
 
 const VALID_STANDARD_TYPES: StandardType[] = [
   'READING_DECODE',
@@ -191,7 +191,7 @@ function validateQuestion(
   } else {
     const keys = Object.keys(choices).sort();
     if (keys.length < 2 || keys.length > 4) {
-      reasons.push(`choices has ${keys.length} keys (need 2â4)`);
+      reasons.push(`choices has ${keys.length} keys (need 2–4)`);
     }
     const missing = VALID_CHOICE_KEYS.filter((k) => !keys.includes(k));
     if (missing.length > 0) {
@@ -249,7 +249,7 @@ interface RawQuestion {
   explanation: string;
 }
 
-// âââ POST handler ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// ─── POST handler ────────────────────────────────────────────────────────────
 
 export async function POST(request: NextRequest) {
   try {
