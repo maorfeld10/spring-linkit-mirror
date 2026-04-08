@@ -344,7 +344,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const questions: Question[] = (inserted ?? []).map((row) => ({
+    const questions: Question[] = ((inserted ?? []) as any[]).map((row: any) => ({
       id: row.id,
       subject: row.subject as Question['subject'],
       standard_type: row.standard_type as Question['standard_type'],
