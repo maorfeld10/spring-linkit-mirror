@@ -1,9 +1,8 @@
-import { NextRequest, NextResponse } from 'next/server';
 import { getSupabaseClient } from '@/lib/supabase';
 import type { Question, Choices, AudioConfig } from '@/types';
 import { getDefaultAudioConfig } from '@/types';
 
-// ─── Helpers ─────────────────────────────────────────────────────────────────
+// âââ Helpers âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 
 function rowToQuestion(row: Record<string, unknown>): Question {
   return {
@@ -22,9 +21,9 @@ function rowToQuestion(row: Record<string, unknown>): Question {
   };
 }
 
-// ─── GET /api/questions?status=PENDING_REVIEW&subject=ELA ────────────────────
+// âââ GET /api/questions?status=PENDING_REVIEW&subject=ELA ââââââââââââââââââââ
 
-export async function GET(request: NextRequest) {
+export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
     const status = searchParams.get('status');
@@ -46,7 +45,7 @@ export async function GET(request: NextRequest) {
     const { data, error } = await query;
 
     if (error) {
-      return NextResponse.json(
+      return Response.json(
         { error: `Supabase query failed: ${error.message}` },
         { status: 500 }
       );
@@ -56,14 +55,14 @@ export async function GET(request: NextRequest) {
       rowToQuestion(row as unknown as Record<string, unknown>)
     );
 
-    return NextResponse.json({ questions });
+    return Response.json({ questions });
   } catch (err) {
     const msg = err instanceof Error ? err.message : 'Unknown error';
-    return NextResponse.json({ error: msg }, { status: 500 });
+    return Response.json({ error: msg }, { status: 500 });
   }
 }
 
-// ─── PATCH /api/questions ────────────────────────────────────────────────────
+// âââ PATCH /api/questions ââââââââââââââââââââââââââââââââââââââââââââââââââââ
 // Body: { id: string, ...fieldsToUpdate }
 
 interface PatchBody {
@@ -78,12 +77,12 @@ interface PatchBody {
   standard_type?: string;
 }
 
-export async function PATCH(request: NextRequest) {
+export async function PATCH(request: Request) {
   try {
     const body = (await request.json()) as PatchBody;
 
     if (!body.id || typeof body.id !== 'string') {
-      return NextResponse.json(
+      return Response.json(
         { error: 'Missing required field: id' },
         { status: 400 }
       );
@@ -91,7 +90,7 @@ export async function PATCH(request: NextRequest) {
 
     const supabase = getSupabaseClient();
 
-    // Build update payload — only include fields that were sent
+    // Build update payload â only include fields that were sent
     const updates: Record<string, unknown> = {};
 
     if (body.status !== undefined) updates.status = body.status;
@@ -114,7 +113,7 @@ export async function PATCH(request: NextRequest) {
     }
 
     if (Object.keys(updates).length === 0) {
-      return NextResponse.json(
+      return Response.json(
         { error: 'No fields to update' },
         { status: 400 }
       );
@@ -128,29 +127,29 @@ export async function PATCH(request: NextRequest) {
       .single();
 
     if (error) {
-      return NextResponse.json(
+      return Response.json(
         { error: `Supabase update failed: ${error.message}` },
         { status: 500 }
       );
     }
 
     const question = rowToQuestion((data as any) as Record<string, unknown>);
-    return NextResponse.json({ question });
+    return Response.json({ question });
   } catch (err) {
     const msg = err instanceof Error ? err.message : 'Unknown error';
-    return NextResponse.json({ error: msg }, { status: 500 });
+    return Response.json({ error: msg }, { status: 500 });
   }
 }
 
-// ─── DELETE /api/questions?id=uuid ───────────────────────────────────────────
+// âââ DELETE /api/questions?id=uuid âââââââââââââââââââââââââââââââââââââââââââ
 
-export async function DELETE(request: NextRequest) {
+export async function DELETE(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
     const id = searchParams.get('id');
 
     if (!id) {
-      return NextResponse.json(
+      return Response.json(
         { error: 'Missing required query param: id' },
         { status: 400 }
       );
@@ -163,15 +162,15 @@ export async function DELETE(request: NextRequest) {
       .eq('id', id);
 
     if (error) {
-      return NextResponse.json(
+      return Response.json(
         { error: `Supabase delete failed: ${error.message}` },
         { status: 500 }
       );
     }
 
-    return NextResponse.json({ deleted: id });
+    return Response.json({ deleted: id });
   } catch (err) {
     const msg = err instanceof Error ? err.message : 'Unknown error';
-    return NextResponse.json({ error: msg }, { status: 500 });
+    return Response.json({ error: msg }, { status: 500 });
   }
 }
