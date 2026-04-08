@@ -52,7 +52,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const questions = (data ?? []).map((row) =>
+    const questions = ((data ?? []) as any[]).map((row: any) =>
       rowToQuestion(row as unknown as Record<string, unknown>)
     );
 
@@ -122,7 +122,7 @@ export async function PATCH(request: NextRequest) {
 
     const { data, error } = await supabase
       .from('questions')
-      .update(updates)
+      .update(updates as any)
       .eq('id', body.id)
       .select()
       .single();
@@ -134,7 +134,7 @@ export async function PATCH(request: NextRequest) {
       );
     }
 
-    const question = rowToQuestion(data as unknown as Record<string, unknown>);
+    const question = rowToQuestion((data as any) as Record<string, unknown>);
     return NextResponse.json({ question });
   } catch (err) {
     const msg = err instanceof Error ? err.message : 'Unknown error';
