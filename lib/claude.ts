@@ -18,7 +18,7 @@ export function getClaudeClient(): Anthropic {
   return client;
 }
 
-export const CLAUDE_MODEL = 'claude-sonnet-4-5-20251001';
+export const CLAUDE_MODEL = 'claude-sonnet-4-5-20241022';
 export const MAX_TOKENS = 4096;
 
 // ─── ELA question generator (calls our own API route) ────────────────────────
