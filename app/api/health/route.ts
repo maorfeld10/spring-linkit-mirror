@@ -1,4 +1,3 @@
-import { NextResponse } from 'next/server';
 import { getSupabaseClient } from '@/lib/supabase';
 
 export const dynamic = 'force-dynamic';
@@ -13,7 +12,7 @@ export async function GET() {
       .select('id', { count: 'exact', head: true });
 
     if (error) {
-      return NextResponse.json(
+      return Response.json(
         {
           status: 'error',
           service: 'supabase',
@@ -24,13 +23,13 @@ export async function GET() {
       );
     }
 
-    return NextResponse.json({
+    return Response.json({
       status: 'ok',
       timestamp: new Date().toISOString(),
     });
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Unknown error';
-    return NextResponse.json(
+    return Response.json(
       { status: 'error', message, timestamp: new Date().toISOString() },
       { status: 500 }
     );
